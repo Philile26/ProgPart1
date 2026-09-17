@@ -42,7 +42,7 @@ public class LoginTest {
     public void testCheckcellphonenumberValid() {
         System.out.println("checkcellphonenumber");
         Login instance = new Login("Kyle", "+27838968976", "kyl_1", "Ch&&sec@ke99!");
-        boolean expResult = false;
+        boolean expResult = true;
         boolean result = instance.checkcellphonenumber();
         assertEquals(expResult, result);
     }
