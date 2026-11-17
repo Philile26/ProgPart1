@@ -3,10 +3,12 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package com.mycompany.progpart1;
+
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Random;
 import java.util.Scanner;
+
 /**
  *
  * @author Student
@@ -18,14 +20,21 @@ public class Message {
     private String recipient;
     private String messageText;
     private String messageHash;
+    private String flag; // "Sent", "Stored", or "Disregard" - Added for Part 3
 
-    // Constructor
-    public Message(String recipient, String messageText, int numMessagesSent) {
+    // 1. 4-Argument Constructor (Used by Part 3 & MessageManager)
+    public Message(String recipient, String messageText, int numMessagesSent, String flag) {
         this.recipient = recipient;
         this.messageText = messageText;
         this.numMessagesSent = numMessagesSent;
+        this.flag = flag;
         this.messageID = generateMessageID();
         this.messageHash = createMessageHash();
+    }
+
+    // 2. Overloaded 3-Argument Constructor (Keeps existing unit tests happy!)
+    public Message(String recipient, String messageText, int numMessagesSent) {
+        this(recipient, messageText, numMessagesSent, "Sent");
     }
 
     // Method to randomly generate a 10-digit ID
@@ -46,8 +55,6 @@ public class Message {
 
     // 2. String: checkRecipientCell()
     public String checkRecipientCell() {
-        // Note: The instruction text says "<= 10 chars", but the test data (+27718693002) 
-        // is 12 chars. We check if it starts with '+' (international code) and has a valid length.
         if (recipient.startsWith("+") && recipient.length() >= 10 && recipient.length() <= 15) {
             return "Cell phone number successfully captured.";
         } else {
@@ -57,7 +64,6 @@ public class Message {
 
     // 3. String: createMessageHash()
     public String createMessageHash() {
-        // Hash contains: first 2 digits of ID + ":" + message number + ":" + first & last word
         String firstTwoID = messageID.substring(0, 2);
         
         String[] words = messageText.trim().split("\\s+");
@@ -79,10 +85,13 @@ public class Message {
         scanner.nextLine(); // Consume newline
 
         if (choice == 1) {
+            this.flag = "Sent";
             return "Message successfully sent.";
         } else if (choice == 2) {
+            this.flag = "Disregard";
             return "Press 0 to delete the message.";
         } else if (choice == 3) {
+            this.flag = "Stored";
             storeMessage(); // Research requirement: Store as JSON
             return "Message successfully stored.";
         } else {
@@ -107,7 +116,6 @@ public class Message {
     public void storeMessage() {
         try {
             FileWriter file = new FileWriter("messages.json", true); // true = append mode
-            // Writing a simple JSON structure
             String json = "{\n" +
                     "  \"id\": \"" + messageID + "\",\n" +
                     "  \"recipient\": \"" + recipient + "\",\n" +
@@ -121,12 +129,10 @@ public class Message {
         }
     }
 
-    // Getters for testing and main class
+    // Getters for testing, main class, and Part 3 MessageManager
     public String getMessageID() { return messageID; }
     public String getMessageHash() { return messageHash; }
     public String getRecipient() { return recipient; }
     public String getMessageText() { return messageText; }
+    public String getFlag() { return flag; } // Added for Part 3
 }
-
-
-

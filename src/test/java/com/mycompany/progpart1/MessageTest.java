@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * @author Student
  */
 public class MessageTest {
-   // 1. Test Constructor and Getters
+   // 1. Test Constructor 
     @Test
     public void testConstructorAndGetters() {
         Message msg = new Message("+27718693002", "Hello", 1);
@@ -33,7 +33,6 @@ public class MessageTest {
     public void testCheckMessageID() {
         Message msg = new Message("+27718693002", "Test", 1);
         
-        // The generated ID should be exactly 10 characters, so this should be true
         assertTrue(msg.checkMessageID());
     }
 
@@ -58,12 +57,11 @@ public class MessageTest {
     // 5. Test createMessageHash()
     @Test
     public void testCreateMessageHash() {
-        // Using "Hi there!" -> First word "Hi", Last word "there!" -> cleaned to "THERE"
+        // Using "Hi there!" 
         Message msg = new Message("+27718693002", "Hi there!", 1);
         String hash = msg.createMessageHash();
         
-        // Hash format: [First 2 of ID]:[MessageNum]:[FirstWord][LastWord]
-        // Since ID is random, we just check if it ends with the expected text
+    
         assertTrue(hash.endsWith(":1:HITHERE"));
     }
 
@@ -120,7 +118,6 @@ public class MessageTest {
     // 11. Test SentMessage() - Invalid Option
     @Test
     public void testSentMessage_Invalid() {
-        // Simulate the user typing "9" (an invalid choice)
         System.setIn(new ByteArrayInputStream("9\n".getBytes()));
         
         Message msg = new Message("+27718693002", "Test", 1);
